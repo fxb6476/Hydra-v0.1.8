@@ -781,6 +781,12 @@ int process_header_end(server_params * params, request * req)
    }
 
    if (req->method == M_POST) {
+	   
+      // Weird patch for CVE-17502 Felix Blanco. Needs testing.
+      if(!req->content_length){
+	 req->content_legnth = -1;
+      }
+	   
       req->post_data_fd =
 	  create_temporary_file(1, boa_atoi(req->content_length));
       if (req->post_data_fd.fds[0] == -1)
